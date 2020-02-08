@@ -88,6 +88,7 @@ val ZioCatsVersion = "2.0.0.0-RC12"
 val ZioMacroVersion = "0.6.0"
 val DoobieVersion = "0.8.6"
 val AnormVersion = "2.6.5"
+val QuillVersion = "3.5.0"
 val H2Version = "1.4.200"
 
 libraryDependencies ++= Seq(
@@ -98,6 +99,9 @@ libraryDependencies ++= Seq(
   /* Doobie */
   "org.tpolecat" %% "doobie-core" % DoobieVersion % "optional",
   "org.playframework.anorm" %% "anorm" % AnormVersion % "optional",
+
+  /* Quill */
+  "io.getquill" %% "quill-jdbc" % QuillVersion,
 
   /* ZIO test */
   "dev.zio" %% "zio-test" % ZioVersion % "test",
