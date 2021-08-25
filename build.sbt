@@ -1,22 +1,20 @@
-import sbt.Keys._
 
-organization := "io.github.gaelrenoux"
+organization := "com.upstartcommerce"
 name := "tranzactio"
 licenses := Seq("APL2" -> url("https://www.apache.org/licenses/LICENSE-2.0.txt"))
 description := "ZIO wrapper for Scala DB libraries (e.g. Doobie)"
 
-scalaVersion := "2.13.3"
-
-
+scalaVersion := "2.13.6"
 
 // Publishing information
+credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+val artifactoryResolver =
+  Resolver.url("upstartcommerce", url("https://upstartcommerce.jfrog.io/artifactory/nochannel"))(Resolver.ivyStylePatterns)
+resolvers in Global += artifactoryResolver
 
-import xerial.sbt.Sonatype._
-
-sonatypeProjectHosting := Some(GitHubHosting("gaelrenoux", "tranzactio", "gael.renoux@gmail.com"))
-publishTo := sonatypePublishTo.value
-
-
+publishTo := Some(artifactoryResolver)
+credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+publishMavenStyle := false
 
 scalacOptions ++= Seq(
   "-Ymacro-annotations",
@@ -28,7 +26,6 @@ scalacOptions ++= Seq(
   // "-XX:MaxInlineLevel=18", // see https://github.com/scala/bug/issues/11627#issuecomment-514619316
 
   "-explaintypes", // Explain type errors in more detail.
-  "-Werror", // Fail the compilation if there are any warnings.
 
   "-feature", // Emit warning and location for usages of features that should be imported explicitly.
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -74,17 +71,16 @@ scalacOptions ++= Seq(
   "-Xlint:deprecation" // Enable linted deprecations.
 )
 
-
-
-val ZioVersion = "1.0.0"
-val ZioCatsVersion = "2.1.4.0"
-val DoobieVersion = "0.9.0"
-val AnormVersion = "2.6.7"
+val ZioVersion = "1.0.11"
+val ZioCatsVersion = "3.1.1.0"
+val DoobieVersion = "1.0.0-M5"
+val AnormVersion = "2.6.10"
 val H2Version = "1.4.200"
 
 libraryDependencies ++= Seq(
   /* ZIO */
   "dev.zio" %% "zio" % ZioVersion,
+  "dev.zio" %% "zio-streams" % ZioVersion,
   "dev.zio" %% "zio-interop-cats" % ZioCatsVersion,
 
   /* Doobie */
@@ -99,8 +95,6 @@ libraryDependencies ++= Seq(
   /* H2 for tests */
   "com.h2database" % "h2" % H2Version % "test"
 )
-
-
 
 Test / fork := true
 Test / testForkedParallel := true // run tests in parallel on the forked JVM
